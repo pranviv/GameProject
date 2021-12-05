@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+</head>
+<body class="hold-transition register-page">
+
+<form th:action="@{/register}"  method="post">
+    <input type="text" th:value="${userName}" name="userName"/>
+    <input type="text" th:value="${password}" name="password"/>
+    <input type="submit" />
+</form>
+
+</body>
+</html>

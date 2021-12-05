@@ -47,6 +47,10 @@ public class GameController {
         log.info("Player name: {} ", player.getName());
         return playerService.addPlayer(player).getId();
     }
+
+
+
+
 //    @GetMapping("player/{id}")
 //    public Player getPlayer(@PathVariable Long id){
 //        return playerService.getPlayer(id);
