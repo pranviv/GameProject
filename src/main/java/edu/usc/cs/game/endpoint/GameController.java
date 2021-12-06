@@ -1,7 +1,9 @@
 package edu.usc.cs.game.endpoint;
 
+import edu.usc.cs.game.dao.UserRepository;
 import edu.usc.cs.game.model.Game;
 import edu.usc.cs.game.model.Player;
+import edu.usc.cs.game.model.User;
 import edu.usc.cs.game.service.GameService;
 import edu.usc.cs.game.service.GameServiceImpl;
 import edu.usc.cs.game.service.PlayerService;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.security.PermitAll;
 import java.security.Principal;
 
+@CrossOrigin(origins = { "http://localhost:3000", "http://localhost:4200" })
 @RequestMapping("/game")
 @RestController
 public class GameController {
@@ -25,6 +28,9 @@ public class GameController {
     private GameService gameService;
     @Autowired
     private PlayerService playerService;
+
+    @Autowired
+    UserRepository userRepo;
 
     @GetMapping("/{id}")
     public Game getGame(@PathVariable int id){
@@ -46,6 +52,11 @@ public class GameController {
     public Long addPlayer(@RequestBody Player player){
         log.info("Player name: {} ", player.getName());
         return playerService.addPlayer(player).getId();
+    }
+
+    @GetMapping("/users/{username}")
+    public User getUser(@PathVariable String username) {
+        return userRepo.findByEmail(username);
     }
 
 
