@@ -10,9 +10,18 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
 @Service
 public class GameServiceImpl implements GameService {
     private static Logger log = LoggerFactory.getLogger(GameServiceImpl.class);
+
+    private ArrayList<Game> gameQueue;
+
+    @Autowired
+    GameDao gamedao;
 
     @Override
     public void playCard(Game g, Player p, Card c) {
@@ -20,17 +29,47 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public Game getGame(int id) {
-        log.info("Game id is: {}", id);
-        Game game = new Game();
-        Player p1 = new Player("John");
-        p1.setName("John");
-        Player p2 = new Player("Rubens");
-        p1.setName("Rubens");
+    public Game getGame(UUID id) {
+        return gamedao.getGame(id);
+    }
 
-        game.setP1(p1);
-        game.setP2(p2);
-        return game;
+    public List<Game> getGames(){
+        return gamedao.getGames();
+    }
+
+
+    public void addPlayerToQueue(Player p){
+
+        if(gameQueue.size() >= 1 ){
+            //create game
+            Game game = gameQueue.get(0);
+            game.setP2(p);
+
+
+        }
+        else {
+            Game game = new Game();
+            game.setP1(p);
+            gameQueue.add(game);
+        }
+    }
+    public Game getOrCreateGame(Player p){
+        Game game = gamedao.getGameByPlayer(p.getName());
+        if(game == null){
+            Game receivedGame = gamedao.getOpenGame();
+            if(receivedGame == null){
+                UUID uuid = UUID.randomUUID();
+                Game newGame = new Game();
+                newGame.setP1(p);
+                newGame.setUuid(uuid);
+                gamedao.addGame(newGame);
+
+            }
+            else{
+                receivedGame.setP2(p);
+            }
+        }
+        return null;
     }
 
 }

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+</head>
+<body class="hold-transition register-page">
+
+<form id = "play" th:action = "@{/play}"  method="post">
+    <div th:style="${'margin: 0 auto'}">
+    <div th:style="${'border: 2px solid #4CAF50;width: 50%;background-color: #4CAF50;text-align: center;'}">
+        Play
+        <br/>
+        <input type="button" value="Play" class="btn btn-red" />
+    </div>
+    </div>
+
+</form>
+
+</body>
+</html>

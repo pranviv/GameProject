@@ -62,6 +62,15 @@ public class Controller {
 //
 //        return "/login";
 //    }
+    @RequestMapping("/landing")
+    public String landingPage(){
+        return "landing";
+    }
+    @PostMapping("/play")
+    public String startPlay(){
+        log.info("Hit Play");
+        return "redirect:/index.html";
+    }
 
     @GetMapping("/register")
     public String showRegistrationForm(Model model) {
@@ -80,5 +89,6 @@ public class Controller {
 
         return "register_success";
     }
+
 
 }

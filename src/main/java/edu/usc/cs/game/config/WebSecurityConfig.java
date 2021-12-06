@@ -1,5 +1,6 @@
 package edu.usc.cs.game.config;
 
+import edu.usc.cs.game.dao.GameDao;
 import edu.usc.cs.game.service.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -15,6 +16,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -24,11 +26,17 @@ import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
+
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 
 	@Autowired
 	private DataSource dataSource;
+
+	@Bean
+	public GameDao gamedao(){
+		return new GameDao();
+	}
 
 	@Bean
 	public UserDetailsService userDetailsService(){
@@ -57,14 +65,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity httpSecurity) throws Exception {
 		httpSecurity.cors().and().csrf().disable()
 				.authorizeRequests()
-				.antMatchers("/h2-console/**", "/register", "/registration", "/actuator/**", "/process_register", "/game/users/*")
+				.antMatchers("/h2-console/**", "/register", "/registration", "/actuator/**", "/process_register", "/game/users/*", "/home/loginAuth")
 				.permitAll()
 				.anyRequest()
 				.authenticated()
 				.and()
 				.formLogin()
 				.usernameParameter("email")
-				.defaultSuccessUrl("/principal")
+				//.defaultSuccessUrl("/principal")
+				.defaultSuccessUrl("/landing")
 				.and()
 				.logout()
 				.logoutSuccessUrl("/")

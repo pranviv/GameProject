@@ -1,10 +1,14 @@
 package edu.usc.cs.game.model;
 
+import java.util.UUID;
+
 public class Game {
     private Player p1;
     private Player p2;
     private Board b;
     private boolean currentTurn;
+    private UUID uuid;
+
 
     public Player getP1() {
         return p1;
@@ -36,5 +40,13 @@ public class Game {
 
     public void setCurrentTurn(boolean currentTurn) {
         this.currentTurn = currentTurn;
+    }
+
+    public UUID getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(UUID uuid) {
+        this.uuid = uuid;
     }
 }
