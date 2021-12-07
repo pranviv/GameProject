@@ -65,13 +65,17 @@ public class GameController {
         return userRepo.findByEmail(username);
     }
 
-
-    @PostMapping("/setdeck")
-    public void setDeck(Principal principal, @RequestBody List<Card> cardList){
-        //create player set deck
-        //getOrCreateGame(Player p)
-
+    @PostMapping("/test")
+    public String test(Principal principal){
+        return principal.toString();
     }
+
+//    @PostMapping("/setdeck")
+//    public void setDeck(Principal principal, @RequestBody List<Card> cardList){
+//        //create player set deck
+//        //getOrCreateGame(Player p)
+//
+//    }
 
     @GetMapping("/games")
     public List<Game> getGames(){
@@ -84,14 +88,27 @@ public class GameController {
         return game;
     }
     @GetMapping("/games/{gameId}")
-    public Game getGame(@PathVariable UUID gameId){
+    public Game getGame( @PathVariable UUID gameId){
         return gameService.getGame(gameId);
     }
 
-//    @PostMapping("/games/{gameId}/{playerId}/deck")
-//    public List<Player> getGame(@PathVariable UUID gameId){
-//        return gameService.getGame(gameId).
-//    }
+    @PostMapping("/games/deck")
+    public Game setDeck(Principal principal, @RequestBody List<Card> cardList){
+        Player p = new Player(principal.getName());
+        p.setDeck(cardList);
+        Game game = gameService.getOrCreateGame(p);
+        if(game.getP1().getName() == principal.getName()){
+            game.getP1().setDeck(cardList);
+        }
+        else if(game.getP2().getName() == principal.getName()) {
+            game.getP2().setDeck(cardList);
+        }
+        else {
+            log.info("No Matching Player");
+        }
+        log.info("In games/deck");
+        return game;
+    }
 
 
 //    @GetMapping("/games/{gameId}/players")

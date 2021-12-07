@@ -21,6 +21,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.security.Principal;
 
 
 @org.springframework.stereotype.Controller
@@ -62,6 +63,9 @@ public class Controller {
 //
 //        return "/login";
 //    }
+
+
+
     @RequestMapping("/landing")
     public String landingPage(){
         return "landing";
@@ -69,7 +73,9 @@ public class Controller {
     @PostMapping("/play")
     public String startPlay(){
         log.info("Hit Play");
+
         return "redirect:/index.html";
+        //return "index.html";
     }
 
     @GetMapping("/register")
@@ -89,6 +95,8 @@ public class Controller {
 
         return "register_success";
     }
+
+
 
 
 }

@@ -25,7 +25,7 @@ import javax.sql.DataSource;
 import java.util.Arrays;
 
 @Configuration
-@EnableWebSecurity
+@EnableWebSecurity(debug = true)
 
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
@@ -65,7 +65,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity httpSecurity) throws Exception {
 		httpSecurity.cors().and().csrf().disable()
 				.authorizeRequests()
-				.antMatchers("/h2-console/**", "/register", "/registration", "/actuator/**", "/process_register", "/game/users/*", "/home/loginAuth")
+				.antMatchers("/h2-console/**", "/register", "/registration", "/actuator/**", "/process_register", "/game/users/*", "/home/loginAuth", "/game/games/deck", "/game/users/garg.pranav@gmail.com")
 				.permitAll()
 				.anyRequest()
 				.authenticated()
@@ -108,6 +108,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 						.password(encoder.encode("pass"))
 						.roles("USER"));
 
+	}
+
+	@Bean
+	CorsConfigurationSource corsConfigurationSource() {
+		CorsConfiguration configuration = new CorsConfiguration();
+		configuration.setAllowedOrigins(Arrays.asList("*"));
+		configuration.setAllowedMethods(Arrays.asList("*"));
+		configuration.setAllowedHeaders(Arrays.asList("*"));
+		configuration.setAllowCredentials(true);
+		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		source.registerCorsConfiguration("/**", configuration);
+		return source;
 	}
 
 }
