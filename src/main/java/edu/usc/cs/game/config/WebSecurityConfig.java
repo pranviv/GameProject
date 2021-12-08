@@ -25,7 +25,7 @@ import javax.sql.DataSource;
 import java.util.Arrays;
 
 @Configuration
-@EnableWebSecurity(debug = true)
+@EnableWebSecurity
 
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
@@ -78,8 +78,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.logout()
 				.logoutSuccessUrl("/")
 				.permitAll();
-		httpSecurity.csrf()
-				.ignoringAntMatchers("/h2-console/**", "/api/**", "/game/users/garg.pranav@gmail.com");
+//		httpSecurity.csrf()
+//				.ignoringAntMatchers("/h2-console/**", "/api/**", "/game/users/garg.pranav@gmail.com");
 		httpSecurity.headers()
 				.frameOptions()
 				.sameOrigin();

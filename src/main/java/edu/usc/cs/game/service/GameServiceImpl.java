@@ -63,10 +63,12 @@ public class GameServiceImpl implements GameService {
                 newGame.setP1(p);
                 newGame.setUuid(uuid);
                 gamedao.addGame(newGame);
+                return newGame;
 
             }
             else{
                 receivedGame.setP2(p);
+                return receivedGame;
             }
         }
         return null;

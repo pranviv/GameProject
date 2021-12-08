@@ -2,8 +2,8 @@ package edu.usc.cs.game.model;
 
 public class Card {
     private int attack;
-    private int defense;
-    private int mana;
+    private int health;
+    private int mana_cost;
 
     public int getAttack() {
         return attack;
@@ -13,19 +13,19 @@ public class Card {
         this.attack = attack;
     }
 
-    public int getDefense() {
-        return defense;
+    public int getHealth() {
+        return health;
     }
 
-    public void setDefense(int defense) {
-        this.defense = defense;
+    public void setHealth(int health) {
+        this.health = health;
     }
 
-    public int getMana() {
-        return mana;
+    public int getMana_cost() {
+        return mana_cost;
     }
 
-    public void setMana(int mana) {
-        this.mana = mana;
+    public void setMana_cost(int mana_cost) {
+        this.mana_cost = mana_cost;
     }
 }

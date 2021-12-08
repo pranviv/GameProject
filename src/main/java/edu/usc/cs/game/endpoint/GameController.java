@@ -94,6 +94,7 @@ public class GameController {
 
     @PostMapping("/games/deck")
     public Game setDeck(Principal principal, @RequestBody List<Card> cardList){
+        log.info("Name from Principal: {}",principal.getName());
         Player p = new Player(principal.getName());
         p.setDeck(cardList);
         Game game = gameService.getOrCreateGame(p);

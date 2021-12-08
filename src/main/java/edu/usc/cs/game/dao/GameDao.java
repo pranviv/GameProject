@@ -8,12 +8,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 
 public class GameDao {
     private static Logger log = LoggerFactory.getLogger(GameDao.class);
-    private HashMap<UUID, Game> gameMap = new HashMap<>();
-    private HashMap<String, Game> gamePlayerMap = new HashMap<>();
+    private ConcurrentHashMap<UUID, Game> gameMap = new ConcurrentHashMap<>();
+    private ConcurrentHashMap<String, Game> gamePlayerMap = new ConcurrentHashMap<>();
 
 
     public GameDao(){
@@ -38,7 +39,9 @@ public class GameDao {
         gameMap.put(game.getUuid(), game);
 
         gamePlayerMap.put(game.getP1().getName(), game);
-        gamePlayerMap.put(game.getP2().getName(), game);
+        if(game.getP2() != null) {
+            gamePlayerMap.put(game.getP2().getName(), game);
+        }
 
         return game.getUuid();
     }
