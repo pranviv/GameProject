@@ -49,4 +49,13 @@ public class Game {
     public void setUuid(UUID uuid) {
         this.uuid = uuid;
     }
+    public Player findPlayerById(String name){
+        if(name == this.p1.getName() ){
+            return p1;
+        }
+        else if(name == this.p2.getName()){
+            return p2;
+        }
+        return null;
+    }
 }

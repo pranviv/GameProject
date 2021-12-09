@@ -18,14 +18,14 @@ public class GameDao {
 
 
     public GameDao(){
-        Player p1 = new Player("Pranav");
-        Player p2 = new Player("John");
-        Game game = new Game();
-        game.setP1(p1);
-        game.setP2(p2);
-        game.setUuid(UUID.randomUUID());
-        log.info("Example Game UUID {}", game.getUuid());
-        addGame(game);
+//        Player p1 = new Player("Pranav");
+//        Player p2 = new Player("John");
+//        Game game = new Game();
+//        game.setP1(p1);
+//        game.setP2(p2);
+//        game.setUuid(UUID.randomUUID());
+//        log.info("Example Game UUID {}", game.getUuid());
+//        addGame(game);
     }
 
     public Game getGame(UUID id){
@@ -57,5 +57,16 @@ public class GameDao {
     }
     public List<Game> getGames(){
         return new ArrayList<>(gameMap.values());
+    }
+
+    public void removeGames(UUID uuid){
+        Game game = null;
+        if(gameMap.get(uuid) != null) {
+            game = gameMap.remove(uuid);
+        }
+        if(game != null) {
+            gamePlayerMap.remove(game.getP1().getName());
+            gamePlayerMap.remove(game.getP2().getName());
+        }
     }
 }

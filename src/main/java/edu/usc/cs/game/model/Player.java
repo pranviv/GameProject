@@ -15,6 +15,10 @@ public class Player {
     @Transient
     private List<Card> hand;
     private int mana;
+    private int life;
+    @Transient
+    private List<Card> board;
+
 
     protected Player(){
 
@@ -61,5 +65,21 @@ public class Player {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public int getLife() {
+        return life;
+    }
+
+    public void setLife(int life) {
+        this.life = life;
+    }
+
+    public List<Card> getBoard() {
+        return board;
+    }
+
+    public void setBoard(List<Card> board) {
+        this.board = board;
     }
 }

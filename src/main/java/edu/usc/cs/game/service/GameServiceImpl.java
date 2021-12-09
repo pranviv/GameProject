@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -23,10 +24,10 @@ public class GameServiceImpl implements GameService {
     @Autowired
     GameDao gamedao;
 
-    @Override
-    public void playCard(Game g, Player p, Card c) {
-        log.info("Playing Card {}",p.getName());
-    }
+//    @Override
+//    public void playCard(Game g, Player p, Card c) {
+//        log.info("Playing Card {}",p.getName());
+//    }
 
     @Override
     public Game getGame(UUID id) {
@@ -72,6 +73,44 @@ public class GameServiceImpl implements GameService {
             }
         }
         return null;
+    }
+
+    public void playCard(UUID uuid,String playername, Card c ){
+        Game game = getGame(uuid);
+        Player p = game.findPlayerById(playername);
+        List<Card> hand =  p.getHand();
+        for(int i = 0; i < hand.size(); i++){
+            Card card = hand.get(i);
+            if(card.equals(c)) {
+                if (p.getBoard().size() < 4){
+                    p.getBoard().add(c);
+                    hand.remove(i);
+                }
+                else {
+                    log.info("Board is full, cannot add");
+                }
+
+            }
+            else {
+                log.info("Card not found in hand {}", c);
+            }
+        }
+    }
+
+    public void attackCard(UUID uuid, Principal principal, Card card ){
+        Game game = getGame(uuid);
+        Player player = null;
+        if(principal.getName().equals(game.getP1().getName())){
+            player = game.getP2();
+        }
+        else if(principal.getName().equals(game.getP2().getName())){
+            player = game.getP1();
+        }
+        player.setLife( player.getLife() - card.getAttack());
+    }
+
+    public void removeGame(UUID uuid){
+        gamedao.removeGames(uuid);
     }
 
 }

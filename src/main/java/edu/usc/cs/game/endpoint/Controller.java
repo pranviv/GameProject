@@ -6,6 +6,7 @@ import edu.usc.cs.game.dao.UserRepository;
 import edu.usc.cs.game.model.Player;
 import edu.usc.cs.game.model.RegistrationInfo;
 import edu.usc.cs.game.model.User;
+import edu.usc.cs.game.service.GameService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.security.Principal;
+import java.util.UUID;
 
 
 @org.springframework.stereotype.Controller
@@ -32,6 +34,9 @@ public class Controller {
 
     @Autowired
     UserRepository userRepo;
+
+    @Autowired
+    private GameService gameService;
 
 
 
@@ -83,6 +88,12 @@ public class Controller {
         model.addAttribute("user", new User());
 
         return "signup_form";
+    }
+
+    @GetMapping("/{gameId}/customlogout")
+    public String customLogout(@PathVariable UUID gameId) {
+        gameService.removeGame(gameId);
+        return "redirect:/logout";
     }
 
     @PostMapping("/process_register")

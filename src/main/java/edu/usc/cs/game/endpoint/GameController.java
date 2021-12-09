@@ -1,5 +1,6 @@
 package edu.usc.cs.game.endpoint;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.usc.cs.game.dao.GameDao;
 import edu.usc.cs.game.dao.UserRepository;
 import edu.usc.cs.game.model.Card;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.PermitAll;
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -27,6 +29,7 @@ import java.util.UUID;
 @RequestMapping("/game")
 @RestController
 public class GameController {
+    private static ObjectMapper objectMapper = new ObjectMapper();
     private static Logger log = LoggerFactory.getLogger(GameController.class);
     @Autowired
     private GameService gameService;
@@ -97,6 +100,22 @@ public class GameController {
         log.info("Name from Principal: {}",principal.getName());
         Player p = new Player(principal.getName());
         p.setDeck(cardList);
+        p.setLife(20);
+        p.setMana(10);
+        ArrayList<Card> myHand = new ArrayList<>();
+        List<Card> deck = p.getDeck();
+        int ctr = 0;
+        for(int i = 0; i < 4 ; i++){
+            if(i < deck.size()){
+                ctr++;
+                myHand.add(deck.get(i));
+            }
+        }
+        for(int i = 0; i < ctr; i++){
+            deck.remove(0);
+        }
+        p.setHand(myHand);
+        p.setBoard(new ArrayList<Card>());
         Game game = gameService.getOrCreateGame(p);
         if(game.getP1().getName() == principal.getName()){
             game.getP1().setDeck(cardList);
@@ -110,6 +129,36 @@ public class GameController {
         log.info("In games/deck");
         return game;
     }
+
+    @PostMapping("games/{gameId}/board/cards")
+    public void playCard(Principal principal, @RequestBody Card card, @PathVariable String gameId){
+        try {
+            log.info("Received Card: {}", objectMapper.writeValueAsString(card));
+        } catch(Exception e) {e.printStackTrace();}
+        log.info(gameId);
+        UUID uuid = UUID.fromString(gameId);
+
+        gameService.playCard(uuid, principal.getName(), card);
+        log.info("Playing Card");
+
+
+    }
+
+    @PostMapping("games/{gameId}/board/attack")
+    public void attackCard(Principal principal, @RequestBody Card card, @PathVariable String gameId){
+        try {
+            log.info("Received Card: {}", objectMapper.writeValueAsString(card));
+        } catch(Exception e) {e.printStackTrace();}
+        log.info(gameId);
+        UUID uuid = UUID.fromString(gameId);
+
+        gameService.attackCard(uuid, principal, card);
+
+        log.info("Attacking with Card");
+
+
+    }
+
 
 
 //    @GetMapping("/games/{gameId}/players")
